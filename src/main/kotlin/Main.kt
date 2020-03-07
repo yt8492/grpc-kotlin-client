@@ -22,14 +22,12 @@ fun main() {
     runBlocking {
         println("--- Client Stream start ---")
         val call = client.clientStream()
-        listOf("hoge", "fuga", "piyo")
-            .map {
-                MessageRequest.newBuilder()
-                    .setMessage(it)
-                    .build()
-            }.forEach {
-                call.send(it)
-            }
+        listOf("hoge", "fuga", "piyo").forEach {
+            val request = MessageRequest.newBuilder()
+                .setMessage(it)
+                .build()
+            call.send(request)
+        }
         call.close()
         val response = call.await()
         println(response.message)
@@ -49,14 +47,12 @@ fun main() {
     runBlocking {
         println("--- Bidirectional Stream start ---")
         val call = client.bidirectionalStream()
-        listOf("hoge", "fuga", "piyo")
-            .map {
-                MessageRequest.newBuilder()
-                    .setMessage(it)
-                    .build()
-            }.forEach {
-                call.send(it)
-            }
+        listOf("hoge", "fuga", "piyo").forEach {
+            val request = MessageRequest.newBuilder()
+                .setMessage(it)
+                .build()
+            call.send(request)
+        }
         call.close()
         call.consumeEach {
             println(it.message)
